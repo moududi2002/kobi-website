@@ -1,8 +1,8 @@
-// apps/api/src/app.module.ts
-
+// apps\api\src\app.module.ts
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 
 import configuration from './config/configuration';
 import { envValidationSchema } from './config/validation';
@@ -26,21 +26,25 @@ import { RolesGuard } from './common/guards/roles.guard';
 
 @Module({
   imports: [
-    // Config (must be first)
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
       load: [configuration],
       validationSchema: envValidationSchema,
-      validationOptions: {
-        abortEarly: false,
-      },
+      validationOptions: { abortEarly: false },
     }),
 
-    // Database
+    // Throttler: 100 requests / minute globally
+    ThrottlerModule.forRoot([
+      {
+        name: 'default',
+        ttl: 60_000,
+        limit: 100,
+      },
+    ]),
+
     DatabaseModule,
 
-    // Feature modules
     AuthModule,
     UsersModule,
     PoemsModule,
@@ -54,16 +58,10 @@ import { RolesGuard } from './common/guards/roles.guard';
     HealthModule,
   ],
   providers: [
-    // Global JWT guard — must explicitly mark routes as @Public()
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
-    // Global roles guard
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
+    // Throttler guard first so it applies even on public routes
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: RolesGuard },
   ],
 })
 export class AppModule {}

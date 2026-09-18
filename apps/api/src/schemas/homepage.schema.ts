@@ -7,7 +7,7 @@ export type HomepageDocument = HydratedDocument<Homepage>;
 export const HOMEPAGE_SINGLETON_ID = 'singleton-homepage';
 
 @Schema({ _id: false })
-class HeroSlide {
+export class HeroSlide {
   @Prop({ type: String, required: true })
   image: string;
 
@@ -20,6 +20,9 @@ class HeroSlide {
   @Prop({ type: String, default: '' })
   quote?: string;
 }
+
+export const HeroSlideSchema =
+  SchemaFactory.createForClass(HeroSlide);
 
 @Schema({
   timestamps: true,
@@ -35,20 +38,35 @@ export class Homepage extends Document {
   })
   singletonKey: string;
 
-  @Prop({ type: [HeroSlide], default: [] })
+  @Prop({
+    type: [HeroSlideSchema],
+    default: [],
+  })
   heroSlides: HeroSlide[];
 
-  @Prop({ type: Types.ObjectId, ref: 'Poem', default: null })
+  @Prop({
+    type: Types.ObjectId,
+    ref: 'Poem',
+    default: null,
+  })
   featuredPoemId?: Types.ObjectId | null;
 
-  @Prop({ type: Types.ObjectId, ref: 'Lyric', default: null })
+  @Prop({
+    type: Types.ObjectId,
+    ref: 'Lyric',
+    default: null,
+  })
   featuredLyricId?: Types.ObjectId | null;
 
-  @Prop({ type: String, default: '' })
+  @Prop({
+    type: String,
+    default: '',
+  })
   welcomeQuote?: string;
 
   createdAt: Date;
   updatedAt: Date;
 }
 
-export const HomepageSchema = SchemaFactory.createForClass(Homepage);
+export const HomepageSchema =
+  SchemaFactory.createForClass(Homepage);

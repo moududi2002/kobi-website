@@ -7,12 +7,8 @@ export type AboutDocument = HydratedDocument<About>;
 /** Fixed singleton document id */
 export const ABOUT_SINGLETON_ID = 'singleton-about';
 
-@Schema({
-  timestamps: true,
-  collection: 'abouts',
-  versionKey: false,
-})
-class TimelineEntry {
+@Schema({ _id: false })
+export class TimelineEntry {
   @Prop({ type: String, required: true })
   year: string;
 
@@ -23,13 +19,20 @@ class TimelineEntry {
   description?: string;
 }
 
-class SocialLink {
+export const TimelineEntrySchema =
+  SchemaFactory.createForClass(TimelineEntry);
+
+@Schema({ _id: false })
+export class SocialLink {
   @Prop({ type: String, required: true })
   platform: string;
 
   @Prop({ type: String, required: true })
   url: string;
 }
+
+export const SocialLinkSchema =
+  SchemaFactory.createForClass(SocialLink);
 
 @Schema({
   timestamps: true,
@@ -45,32 +48,61 @@ export class About extends Document {
   })
   singletonKey: string;
 
-  @Prop({ type: String, default: '', maxlength: 500 })
+  @Prop({
+    type: String,
+    default: '',
+    maxlength: 500,
+  })
   shortBio: string;
 
   /** HTML biography */
-  @Prop({ type: String, default: '' })
+  @Prop({
+    type: String,
+    default: '',
+  })
   fullBio: string;
 
-  @Prop({ type: String, default: null })
+  @Prop({
+    type: String,
+    default: null,
+  })
   portraitImage?: string | null;
 
-  @Prop({ type: String, default: '', maxlength: 300 })
+  @Prop({
+    type: String,
+    default: '',
+    maxlength: 300,
+  })
   literaryIdentity?: string;
 
-  @Prop({ type: [String], default: [] })
+  @Prop({
+    type: [String],
+    default: [],
+  })
   achievements: string[];
 
-  @Prop({ type: [TimelineEntry], default: [] })
+  @Prop({
+    type: [TimelineEntrySchema],
+    default: [],
+  })
   timeline: TimelineEntry[];
 
-  @Prop({ type: String, default: '' })
+  @Prop({
+    type: String,
+    default: '',
+  })
   contactEmail?: string;
 
-  @Prop({ type: String, default: '' })
+  @Prop({
+    type: String,
+    default: '',
+  })
   contactPhone?: string;
 
-  @Prop({ type: [SocialLink], default: [] })
+  @Prop({
+    type: [SocialLinkSchema],
+    default: [],
+  })
   socialLinks: SocialLink[];
 
   createdAt: Date;

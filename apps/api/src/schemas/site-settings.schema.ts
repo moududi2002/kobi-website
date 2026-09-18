@@ -7,13 +7,16 @@ export type SiteSettingsDocument = HydratedDocument<SiteSettings>;
 export const SITE_SETTINGS_SINGLETON_ID = 'singleton-settings';
 
 @Schema({ _id: false })
-class SiteSocialLink {
+export class SiteSocialLink {
   @Prop({ type: String, required: true })
   platform: string;
 
   @Prop({ type: String, required: true })
   url: string;
 }
+
+export const SiteSocialLinkSchema =
+  SchemaFactory.createForClass(SiteSocialLink);
 
 @Schema({
   timestamps: true,
@@ -29,32 +32,58 @@ export class SiteSettings extends Document {
   })
   singletonKey: string;
 
-  @Prop({ type: String, required: true, default: 'কবির নাম' })
+  @Prop({
+    type: String,
+    required: true,
+    default: 'কবির নাম',
+  })
   siteName: string;
 
-  @Prop({ type: String, default: '' })
+  @Prop({
+    type: String,
+    default: '',
+  })
   siteDescription: string;
 
-  @Prop({ type: String, default: null })
+  @Prop({
+    type: String,
+    default: null,
+  })
   logo?: string | null;
 
-  @Prop({ type: String, default: null })
+  @Prop({
+    type: String,
+    default: null,
+  })
   favicon?: string | null;
 
-  @Prop({ type: String, default: '' })
+  @Prop({
+    type: String,
+    default: '',
+  })
   contactEmail?: string;
 
-  @Prop({ type: String, default: '' })
+  @Prop({
+    type: String,
+    default: '',
+  })
   contactPhone?: string;
 
-  @Prop({ type: [SiteSocialLink], default: [] })
+  @Prop({
+    type: [SiteSocialLinkSchema],
+    default: [],
+  })
   socialLinks: SiteSocialLink[];
 
-  @Prop({ type: [String], default: [] })
+  @Prop({
+    type: [String],
+    default: [],
+  })
   metaKeywords: string[];
 
   createdAt: Date;
   updatedAt: Date;
 }
 
-export const SiteSettingsSchema = SchemaFactory.createForClass(SiteSettings);
+export const SiteSettingsSchema =
+  SchemaFactory.createForClass(SiteSettings);
