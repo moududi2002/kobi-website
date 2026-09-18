@@ -16,3 +16,4 @@ tsconfig-resolved.json
 packages/types/src/*.js
 packages/types/src/*.d.ts
 packages/types/src/*.js.map
+.vscode/
