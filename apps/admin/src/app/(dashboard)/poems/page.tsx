@@ -1,3 +1,4 @@
+// apps/admin/src/app/(dashboard)/poems/page.tsx
 export default function PoemsPage() {
   return (
     <div className="max-w-7xl">
