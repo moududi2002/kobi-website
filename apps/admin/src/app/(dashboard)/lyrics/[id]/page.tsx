@@ -1,31 +1,29 @@
-// apps/admin/src/app/(dashboard)/poems/[id]/page.tsx
+// apps/admin/src/app/(dashboard)/lyrics/[id]/page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 
-import type { Category, Poem } from '@kobi/types';
+import type { Category, Lyric } from '@kobi/types';
 import { apiClient } from '@/lib/api/client';
-import { PoemForm } from '@/components/forms/PoemForm';
+import { LyricForm } from '@/components/forms/LyricForm';
 
-export default function EditPoemPage() {
+export default function EditLyricPage() {
   const params = useParams<{ id: string }>();
-  const [poem, setPoem] = useState<Poem | null>(null);
+  const [lyric, setLyric] = useState<Lyric | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       try {
-        const [p, cats] = await Promise.all([
-          apiClient.get<Poem>(`/admin/poems/${params.id}`),
-          apiClient.get<Category[]>('/admin/categories?type=poem'),
+        const [l, cats] = await Promise.all([
+          apiClient.get<Lyric>(`/admin/lyrics/${params.id}`),
+          apiClient.get<Category[]>('/admin/categories?type=lyric'),
         ]);
-        setPoem(p);
+        setLyric(l);
         setCategories(cats);
-      } catch {
-        // ignore
       } finally {
         setLoading(false);
       }
@@ -40,13 +38,13 @@ export default function EditPoemPage() {
     );
   }
 
-  if (!poem) {
+  if (!lyric) {
     return (
       <div className="text-center py-16 font-bangla text-[var(--color-admin-text-muted)]">
-        কবিতা পাওয়া যায়নি
+        লিরিক পাওয়া যায়নি
       </div>
     );
   }
 
-  return <PoemForm initial={poem} categories={categories} />;
+  return <LyricForm initial={lyric} categories={categories} />;
 }

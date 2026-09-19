@@ -21,12 +21,18 @@ import {
 } from './dto/lyric.dto';
 import { Roles, Role } from '../../common/decorators/roles.decorator';
 
+import { PreviewService } from '../preview/preview.service';
+import { CurrentUser, AuthUser } from '../../common/decorators/current-user.decorator';
+
 @ApiTags('Lyrics (admin)')
 @ApiBearerAuth('access-token')
 @Roles(Role.ADMIN)
 @Controller('admin/lyrics')
 export class LyricsAdminController {
-  constructor(private readonly lyricsService: LyricsService) {}
+  constructor(
+    private readonly lyricsService: LyricsService,
+    private readonly previewService: PreviewService,
+  ) {}
 
   @Get()
   @ApiOperation({ summary: 'সব লিরিক (admin)' })
@@ -45,6 +51,20 @@ export class LyricsAdminController {
   async create(@Body() dto: CreateLyricDto) {
     return this.lyricsService.create(dto);
   }
+
+  @Post(':id/preview-token')
+  @ApiOperation({ summary: 'Draft preview token' })
+  async createPreviewToken(
+  @Param('id') id: string,
+  @CurrentUser() user: AuthUser,
+  ) {
+  const lyric = await this.lyricsService.findByIdOrFail(id);
+  return this.previewService.createToken(
+    'lyric',
+    lyric._id.toString(),
+    user.userId,
+  );
+}
 
   @Patch(':id')
   @ApiOperation({ summary: 'লিরিক update' })
