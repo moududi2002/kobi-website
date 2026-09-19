@@ -8,3 +8,4 @@ export * from './homepage.schema';
 export * from './site-settings.schema';
 export * from './media-asset.schema';
 export * from './preview-token.schema';
+export * from './contact-message.schema';

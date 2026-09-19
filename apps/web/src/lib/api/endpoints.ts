@@ -179,3 +179,18 @@ export async function fetchRssData() {
     cache: 'no-store',
   });
 }
+
+export interface ContactMessageInput {
+  name: string;
+  email: string;
+  phone?: string;
+  subject: string;
+  message: string;
+  website?: string; // honeypot
+}
+
+export async function sendContactMessage(input: ContactMessageInput) {
+  return apiClient.post<{ success: boolean; id: string }>('/contact', input, {
+    cache: 'no-store',
+  });
+}

@@ -1,6 +1,7 @@
 // apps/api/src/database/models.module.ts
 import { Global, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+export * from '../schemas/contact-message.schema';
 
 import {
   User,
@@ -23,6 +24,8 @@ import {
   MediaAssetSchema,
   PreviewToken,
   PreviewTokenSchema,
+  ContactMessage,
+  ContactMessageSchema,
 } from '../schemas';
 
 @Global()
@@ -39,6 +42,8 @@ import {
       { name: SiteSettings.name, schema: SiteSettingsSchema },
       { name: MediaAsset.name, schema: MediaAssetSchema },
       { name: PreviewToken.name, schema: PreviewTokenSchema },
+      { name: ContactMessage.name, schema: ContactMessageSchema },
+
     ]),
   ],
   exports: [

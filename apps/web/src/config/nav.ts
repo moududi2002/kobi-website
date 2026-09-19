@@ -51,5 +51,13 @@ export const footerNav = {
         { title: 'রম্য', href: '/lyrics/category/rommo' },
       ],
     },
+    {
+      title: 'অন্যান্য',
+      links: [
+        { title: 'সাইটম্যাপ', href: '/sitemap-page' },
+        { title: 'RSS ফিড', href: '/rss.xml' },
+        { title: 'অনুসন্ধান', href: '/search' },
+     ],
+    },
   ],
 };

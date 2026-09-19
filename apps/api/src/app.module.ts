@@ -1,4 +1,4 @@
-// apps\api\src\app.module.ts
+// apps/api/src/app.module.ts
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
@@ -25,6 +25,8 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 
 import { AppLogger } from './common/logger/app-logger.service';
+
+import { ContactModule } from './modules/contact/contact.module';
 
 
 @Module({
@@ -59,6 +61,8 @@ import { AppLogger } from './common/logger/app-logger.service';
     PreviewModule,
     SettingsModule,
     HealthModule,
+    ContactModule,
+
   ],
   providers: [
     AppLogger,
