@@ -26,11 +26,37 @@ export interface ListQuery {
 }
 
 // ---------------- Homepage ----------------
-export async function fetchHomepageFull() {
+/* export async function fetchHomepageFull() {
   return apiClient.get<HomepageFullData>('/homepage/full', {
     revalidate: 60,
     tags: ['homepage'],
   });
+}
+  */
+
+// Backend না চললে homepage crash হওয়া থেকে বাঁচাতে helper
+export async function fetchHomepageFull(): Promise<HomepageFullData> {
+  try {
+    return await apiClient.get<HomepageFullData>('/homepage/full', {
+      revalidate: 60,
+      tags: ['homepage'],
+    });
+  } catch (err) {
+    console.warn('[fetchHomepageFull] fallback due to error:', err);
+    return {
+      homepage: {
+        heroSlides: [],
+        featuredPoem: null,
+        featuredLyric: null,
+        welcomeQuote: '',
+      } as any,
+      latestPoems: [],
+      latestLyrics: [],
+      featuredPoems: [],
+      featuredLyrics: [],
+      about: null,
+    };
+  }
 }
 
 // ---------------- About ----------------

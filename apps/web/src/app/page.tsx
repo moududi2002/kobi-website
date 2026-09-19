@@ -6,6 +6,7 @@ import { LatestWorks } from '@/components/home/LatestWorks';
 import { FeaturedWork } from '@/components/home/FeaturedWork';
 import { LiteraryArchive } from '@/components/home/LiteraryArchive';
 import { AboutCTA } from '@/components/home/AboutCTA';
+import { siteConfig } from '@/config/site';
 
 export const revalidate = 60;
 
@@ -14,17 +15,26 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSection slides={data.homepage.heroSlides} />
-      <IntroSection about={data.about} welcomeQuote={data.homepage.welcomeQuote} />
-      <LatestWorks
-        poems={data.latestPoems}
-        lyrics={data.latestLyrics}
+      <HeroSection
+        slides={data.homepage.heroSlides}
+        poetName={siteConfig.name}
       />
+
+      <IntroSection
+        about={data.about}
+        welcomeQuote={data.homepage.welcomeQuote}
+        poetName={siteConfig.name}
+      />
+
+      <LatestWorks poems={data.latestPoems} lyrics={data.latestLyrics} />
+
       {data.homepage.featuredPoem && (
         <FeaturedWork poem={data.homepage.featuredPoem} />
       )}
+
       <LiteraryArchive />
-      <AboutCTA />
+
+      <AboutCTA poetName={siteConfig.name} />
     </>
   );
 }
