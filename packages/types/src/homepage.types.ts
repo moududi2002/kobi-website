@@ -12,4 +12,6 @@ export interface Homepage {
   featuredPoemId?: string;
   featuredLyricId?: string;
   updatedAt: string;
+  welcomeQuote: string;
+
 }
