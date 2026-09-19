@@ -25,7 +25,9 @@ import { Roles, Role } from '../../common/decorators/roles.decorator';
 import { CurrentUser, AuthUser } from '../../common/decorators/current-user.decorator';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 
-const MAX_FILE_SIZE = 8 * 1024 * 1024; // 8 MB
+import { Throttle } from '@nestjs/throttler';
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 const ALLOWED_MIME = [
   'image/jpeg',
   'image/png',
@@ -64,6 +66,7 @@ export class MediaAdminController {
   }
 
   @Post('upload')
+  @Throttle({ default: { limit: 20, ttl: 60_000 } }) // 20 upload / min
   @ApiOperation({ summary: 'একটি ছবি আপলোড' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -97,6 +100,7 @@ export class MediaAdminController {
   }
 
   @Post('upload-many')
+  @Throttle({ default: { limit: 5, ttl: 60_000 } }) // 5 bulk uploads / min
   @ApiOperation({ summary: 'একাধিক ছবি আপলোড (max 20)' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -141,4 +145,6 @@ export class MediaAdminController {
   async removeFolder(@Param('folder') folder: string) {
     return this.mediaService.deleteFolder(folder);
   }
+
+  
 }

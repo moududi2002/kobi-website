@@ -1,0 +1,202 @@
+{
+  "info": {
+    "name": "Kobi Website API",
+    "description": "Complete API collection for the poet website",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:4000/api/v1" },
+    { "key": "accessToken", "value": "" },
+    { "key": "poemId", "value": "" },
+    { "key": "lyricId", "value": "" },
+    { "key": "categoryId", "value": "" },
+    { "key": "mediaId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.accessToken) {",
+                  "  pm.collectionVariables.set('accessToken', res.data.accessToken);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@kobi.com\",\n  \"password\": \"ChangeMe@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        },
+        {
+          "name": "Refresh",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/auth/refresh", "host": ["{{baseUrl}}"], "path": ["auth", "refresh"] }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/auth/logout", "host": ["{{baseUrl}}"], "path": ["auth", "logout"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Public",
+      "item": [
+        {
+          "name": "Homepage full",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/homepage/full", "host": ["{{baseUrl}}"], "path": ["homepage", "full"] }
+          }
+        },
+        {
+          "name": "About",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/about", "host": ["{{baseUrl}}"], "path": ["about"] }
+          }
+        },
+        {
+          "name": "Settings",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/settings", "host": ["{{baseUrl}}"], "path": ["settings"] }
+          }
+        },
+        {
+          "name": "Poems list",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/poems?page=1&limit=10", "host": ["{{baseUrl}}"], "path": ["poems"] }
+          }
+        },
+        {
+          "name": "Lyrics list",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/lyrics?page=1&limit=10", "host": ["{{baseUrl}}"], "path": ["lyrics"] }
+          }
+        },
+        {
+          "name": "Categories",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/categories?type=lyric", "host": ["{{baseUrl}}"], "path": ["categories"] }
+          }
+        },
+        {
+          "name": "Search",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/search?q=বৃষ্টি&type=all", "host": ["{{baseUrl}}"], "path": ["search"] }
+          }
+        },
+        {
+          "name": "Sitemap data",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/seo/sitemap-data", "host": ["{{baseUrl}}"], "path": ["seo", "sitemap-data"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin — Poems",
+      "item": [
+        {
+          "name": "Create poem",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data._id) pm.collectionVariables.set('poemId', res.data._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"বৃষ্টির দিনে\",\n  \"content\": \"<p>কবিতা...</p>\",\n  \"status\": \"draft\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/admin/poems", "host": ["{{baseUrl}}"], "path": ["admin", "poems"] }
+          }
+        },
+        {
+          "name": "Publish poem",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}" }] },
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"published\"\n}" },
+            "url": { "raw": "{{baseUrl}}/admin/poems/{{poemId}}/status", "host": ["{{baseUrl}}"], "path": ["admin", "poems", "{{poemId}}", "status"] }
+          }
+        },
+        {
+          "name": "Preview token",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}" }] },
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/admin/poems/{{poemId}}/preview-token", "host": ["{{baseUrl}}"], "path": ["admin", "poems", "{{poemId}}", "preview-token"] }
+          }
+        },
+        {
+          "name": "Delete (soft)",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}" }] },
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/admin/poems/{{poemId}}", "host": ["{{baseUrl}}"], "path": ["admin", "poems", "{{poemId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin — Media",
+      "item": [
+        {
+          "name": "Upload single",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}" }] },
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [{ "key": "file", "type": "file", "src": "" }]
+            },
+            "url": { "raw": "{{baseUrl}}/admin/media/upload?folder=kobi-website/hero", "host": ["{{baseUrl}}"], "path": ["admin", "media", "upload"] }
+          }
+        }
+      ]
+    }
+  ]
+}

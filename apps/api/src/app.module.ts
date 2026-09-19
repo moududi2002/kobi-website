@@ -24,6 +24,9 @@ import { HealthModule } from './modules/health/health.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 
+import { AppLogger } from './common/logger/app-logger.service';
+
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -58,6 +61,7 @@ import { RolesGuard } from './common/guards/roles.guard';
     HealthModule,
   ],
   providers: [
+    AppLogger,
     // Throttler guard first so it applies even on public routes
     { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_GUARD, useClass: JwtAuthGuard },

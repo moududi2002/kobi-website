@@ -6,6 +6,9 @@ import { LyricsService } from './lyrics.service';
 import { LyricQueryDto } from './dto/lyric.dto';
 import { Public } from '../../common/decorators/public.decorator';
 
+import { Throttle } from '@nestjs/throttler';
+
+
 @ApiTags('Lyrics (public)')
 @Controller('lyrics')
 export class LyricsController {
@@ -36,6 +39,7 @@ export class LyricsController {
 
   @Public()
   @Post(':slug/view')
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })   // 10 view hits / min per IP
   @ApiOperation({ summary: 'View count বৃদ্ধি' })
   async view(@Param('slug') slug: string) {
     return this.lyricsService.incrementViewBySlug(slug);

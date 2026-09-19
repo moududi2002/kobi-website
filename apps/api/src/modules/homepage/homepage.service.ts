@@ -6,10 +6,13 @@ import {
   Homepage,
   HomepageDocument,
   HOMEPAGE_SINGLETON_ID,
+  ABOUT_SINGLETON_ID,
   Poem,
   PoemDocument,
   Lyric,
   LyricDocument,
+  About,
+  AboutDocument,
 } from '../../schemas';
 import { UpdateHomepageDto } from './dto/homepage.dto';
 
@@ -22,6 +25,8 @@ export class HomepageService {
     private readonly poemModel: Model<PoemDocument>,
     @InjectModel(Lyric.name)
     private readonly lyricModel: Model<LyricDocument>,
+    @InjectModel(About.name)
+    private readonly aboutModel: Model<AboutDocument>,
   ) {}
 
   async get(): Promise<HomepageDocument> {
@@ -37,6 +42,62 @@ export class HomepageService {
     );
     return doc!;
   }
+
+  /**
+ * Aggregate homepage data — one round-trip for the frontend.
+ */
+async getFull() {
+  const [
+    homepage,
+    latestPoems,
+    latestLyrics,
+    featuredPoems,
+    featuredLyrics,
+    about,
+  ] = await Promise.all([
+    this.getPublic(),
+    this.poemModel
+      .find({ status: 'published' })
+      .sort({ publishedAt: -1 })
+      .limit(6)
+      .select('title slug excerpt coverImage publishedAt viewCount readingTimeMinutes')
+      .populate('category', 'name nameEn slug')
+      .lean(),
+    this.lyricModel
+      .find({ status: 'published' })
+      .sort({ publishedAt: -1 })
+      .limit(6)
+      .select('title slug excerpt youtubeVideoId publishedAt viewCount')
+      .populate('category', 'name nameEn slug')
+      .lean(),
+    this.poemModel
+      .find({ status: 'published', featured: true })
+      .sort({ publishedAt: -1 })
+      .limit(3)
+      .select('title slug excerpt coverImage publishedAt')
+      .lean(),
+    this.lyricModel
+      .find({ status: 'published', featured: true })
+      .sort({ publishedAt: -1 })
+      .limit(3)
+      .select('title slug excerpt youtubeVideoId publishedAt')
+      .populate('category', 'name nameEn slug')
+      .lean(),
+    this.aboutModel
+      .findOne({ singletonKey: ABOUT_SINGLETON_ID })
+      .select('shortBio portraitImage literaryIdentity')
+      .lean(),
+  ]);
+
+  return {
+    homepage,
+    latestPoems,
+    latestLyrics,
+    featuredPoems,
+    featuredLyrics,
+    about: about || null,
+  };
+}
 
   /**
    * Public response with featured content fully populated.
@@ -86,8 +147,9 @@ export class HomepageService {
           status: 'published',
         });
         if (!poem) {
-          throw new BadRequestException('Featured poem পাওয়া যায়নি বা published নয়');
-          throw new BadRequestException('Featured lyric পাওয়া যায়নি বা published নয়');
+          throw new BadRequestException(
+            'Featured poem পাওয়া যায়নি বা published নয়'
+          );
         }
         set.featuredPoemId = new Types.ObjectId(dto.featuredPoemId);
       } else {
@@ -101,7 +163,9 @@ export class HomepageService {
           status: 'published',
         });
         if (!lyric) {
-          throw new Error('Featured lyric পাওয়া যায়নি বা published নয়');
+        throw new BadRequestException(
+          'Featured lyric পাওয়া যায়নি বা published নয়'
+        );
         }
         set.featuredLyricId = new Types.ObjectId(dto.featuredLyricId);
       } else {

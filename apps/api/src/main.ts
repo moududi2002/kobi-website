@@ -11,12 +11,17 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { AppLogger } from './common/logger/app-logger.service';
+
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
     logger: ['error', 'warn', 'log', 'debug', 'verbose'],
   });
+  app.useLogger(app.get(AppLogger));
+
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('port')!;

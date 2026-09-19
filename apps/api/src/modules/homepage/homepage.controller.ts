@@ -16,4 +16,10 @@ export class HomepageController {
   async get() {
     return this.homepageService.getPublic();
   }
+  @Public()
+  @Get('full')
+  @ApiOperation({ summary: 'হোমপেজ পূর্ণ aggregate (এক request-এ সব)' })
+  async getFull() {
+        return this.homepageService.getFull();
+    }
 }
