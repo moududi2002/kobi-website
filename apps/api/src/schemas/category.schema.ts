@@ -65,4 +65,3 @@ export class Category extends Document {
 export const CategorySchema = SchemaFactory.createForClass(Category);
 
 CategorySchema.index({ type: 1, order: 1 });
-CategorySchema.index({ type: 1, slug: 1 }, { unique: true });

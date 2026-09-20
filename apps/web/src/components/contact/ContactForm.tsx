@@ -34,7 +34,14 @@ export function ContactForm() {
   const update = (key: keyof FormState, value: string) =>
     setForm((f) => ({ ...f, [key]: value }));
 
-  const submit = async (e: React.FormEvent) => {
+    const isFormValid =
+    form.name.trim().length >= 2 &&
+    form.email.includes('@') &&
+    form.subject.trim().length >= 2 &&
+    form.message.trim().length >= 10;
+
+
+    const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -184,7 +191,7 @@ export function ContactForm() {
         </div>
       )}
 
-      <Button
+      {/* <Button
         type="submit"
         disabled={submitting}
         size="lg"
@@ -199,6 +206,41 @@ export function ContactForm() {
           'বার্তা পাঠান'
         )}
       </Button>
+      */}
+
+      <Button
+        type="submit"
+        disabled={submitting || !isFormValid}
+        size="lg"
+        className="
+          w-full md:w-auto
+          h-5
+          px-4
+          
+          rounded-xl
+          !bg-[var(--color-green-deep)]
+          !text-white
+          !border
+          !border-[var(--color-green-deep)]
+          hover:!bg-[var(--color-green-deep)]
+          hover:!text-white
+          hover:!border-[var(--color-green-deep)]
+          disabled:!bg-[var(--color-green-deep)]
+          disabled:!text-white
+          disabled:!opacity-80
+          disabled:!cursor-not-allowed
+        "
+      >
+        {submitting ? (
+          <>
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            পাঠানো হচ্ছে…
+          </>
+        ) : (
+          'বার্তা পাঠান'
+        )}
+      </Button>
+
 
       <p className="text-xs text-[var(--color-ink-400)] font-bangla">
         * চিহ্নিত ঘরগুলো পূরণ করা আবশ্যক। আপনার তথ্য গোপন রাখা হবে।
