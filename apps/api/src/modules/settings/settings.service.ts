@@ -23,7 +23,7 @@ export class SettingsService {
       {
         $setOnInsert: {
           singletonKey: SITE_SETTINGS_SINGLETON_ID,
-          siteName: 'কবির নাম',
+          siteName: 'শাহ-ই-বাঙ্গালা',
           siteDescription: '',
           socialLinks: [],
           metaKeywords: [],

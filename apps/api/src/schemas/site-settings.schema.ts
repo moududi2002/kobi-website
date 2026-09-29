@@ -35,7 +35,7 @@ export class SiteSettings extends Document {
   @Prop({
     type: String,
     required: true,
-    default: 'কবির নাম',
+    default: 'শাহ-ই-বাঙ্গালা',
   })
   siteName: string;
 

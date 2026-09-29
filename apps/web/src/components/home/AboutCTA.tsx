@@ -12,7 +12,7 @@ interface Props {
 }
 
 export function AboutCTA({ poetName }: Props) {
-  const name = poetName || 'কবির নাম';
+  const name = poetName || 'শাহ-ই-বাঙ্গালা';
 
   return (
     <section className="relative py-24 md:py-32 overflow-hidden bg-gradient-to-b from-[#F8F3E8] via-[#FCF9F2] to-[#F3EBDD]">

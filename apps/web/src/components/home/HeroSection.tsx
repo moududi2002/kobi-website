@@ -29,7 +29,7 @@ export function HeroSection({ slides, poetName }: Props) {
             ﷽
           </p>
           <h1 className="font-display text-[var(--text-hero)] text-[var(--color-cream-50)] mb-6 leading-tight">
-            {poetName || 'কবির নাম'}
+            {poetName || 'শাহ-ই-বাঙ্গালা'}
           </h1>
           <IslamicDivider className="max-w-xs mx-auto" />
           <p className="mt-6 text-[var(--color-cream-200)] text-lg">

@@ -16,7 +16,7 @@ interface Props {
 }
 
 export function IntroSection({ about, welcomeQuote, poetName }: Props) {
-  const name = poetName || 'কবির নাম';
+  const name = poetName || 'শাহ-ই-বাঙ্গালা';
 
   return (
     <section className="relative py-24 md:py-32 overflow-hidden">
