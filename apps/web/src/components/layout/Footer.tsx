@@ -18,14 +18,23 @@ export function Footer() {
         aria-hidden="true"
       />
 
-      <div className="relative container-literary py-16">
-        {/* Top row — name + bismillah */}
-        <div className="text-center mb-12">
-          <p className="font-arabic text-2xl text-[var(--color-green-deep)] mb-2">
-            بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-          </p>
-          <IslamicDivider />
-        </div>
+      <div className="text-center mb-12">
+        <p className="font-arabic text-2xl text-[var(--color-green-deep)] mb-3 leading-relaxed">
+          إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ
+          وَذَكَرُوا اللَّهَ كَثِيرًا
+        </p>
+
+        <p className="font-bangla text-base md:text-lg text-[var(--color-ink-600)] max-w-2xl mx-auto leading-relaxed mb-4">
+          “তবে তারা নয়, যারা ঈমান আনে, সৎকর্ম করে এবং আল্লাহকে অধিক স্মরণ করে।”
+        </p>
+
+        <p className="font-bangla text-sm text-[var(--color-ink-500)]">
+          — সূরা আশ-শু‘আরা, ২৬:২২৭
+        </p>
+
+        <IslamicDivider className="max-w-xs mx-auto mt-5" />
+      
+
 
         {/* Nav grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">

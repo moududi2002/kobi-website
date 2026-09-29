@@ -40,13 +40,14 @@ export function Topbar() {
     process.env.NEXT_PUBLIC_WEB_URL || 'http://localhost:3000';
 
   return (
-    <header className="h-16 bg-[var(--color-admin-surface)] border-b border-[var(--color-admin-border)] flex items-center px-4 md:px-6 gap-4 shrink-0">
+    <header className="relative z-50 h-16 bg-[var(--color-admin-surface)] border-b border-[var(--color-admin-border)] flex items-center px-4 md:px-6 gap-4 shrink-0">
+
       {/* Mobile hamburger */}
       <button
         onClick={() =>
           window.dispatchEvent(new Event('toggle-mobile-sidebar'))
         }
-        className="md:hidden p-2 -ml-2 rounded-md hover:bg-[var(--color-admin-surface-hover)] transition-colors"
+        className="relative z-50 md:hidden p-2 -ml-2 rounded-md hover:bg-[var(--color-admin-surface-hover)] transition-colors"
         aria-label="মেনু"
       >
         <Menu className="w-5 h-5" />

@@ -55,7 +55,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="bn" className={fontVariables}>
-      <body className="min-h-screen flex flex-col antialiased">
+      <body className="min-h-screen flex flex-col antialiased pattern-islamic-soft">
         <SmoothScroll />
         <Header />
         <main className="flex-1">{children}</main>

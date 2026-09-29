@@ -15,7 +15,7 @@ export function AboutCTA({ poetName }: Props) {
   const name = poetName || 'কবির নাম';
 
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden">
+    <section className="relative py-24 md:py-32 overflow-hidden bg-gradient-to-b from-[#F8F3E8] via-[#FCF9F2] to-[#F3EBDD]">
       {/* Soft pattern */}
       <div className="absolute inset-0 pattern-islamic-soft opacity-[0.12]" />
 
